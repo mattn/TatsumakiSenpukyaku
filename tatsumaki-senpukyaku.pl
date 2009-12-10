@@ -15,14 +15,14 @@ sub get {
     my $self = shift;
     $self->response->content_type('multipart/mixed; boundary="|||"');
 
-	my @images;
+    my @images;
     for (3..6) {
         open(my $f, sprintf("static/images/%03d.gif", $_)) or die "$!";
         (my $encdata = encode_base64(join('', <$f>))) =~ s/\n//g;
-		push @images, $encdata;
+        push @images, $encdata;
     }
-	push @images, $images[2];
-	push @images, $images[1];
+    push @images, $images[2];
+    push @images, $images[1];
     my $try = 0;
     $self->stream_write("--|||\n");
     my $t; $t = AE::timer 0, 0.1, sub {
@@ -48,25 +48,25 @@ sub get {
 <script type="text/javascript" src="static/js/Stream.js"></script>
 <script type="text/javascript">
 \$(function() {
-	\$('#animgif').load(function(){
-		\$('#message').text('せー');
-		setTimeout(function() {
-			\$('#animgif').load(function(){
-				\$('#message').text('のー');
-				setTimeout(function() {
-					\$('#animgif').unbind('load');
-					\$('#message').text('竜巻旋風脚！！！');
-					var s = new DUI.Stream();
-					s.listen('image/gif', function(payload) {
-						\$('#animgif').attr('src', 'data:image/gif;base64,'+payload);
-					});
-					s.listen('complete', function() {
-					});
-					s.load('/stream');
-				}, 1000);
-			}).attr('src', 'static/images/002.gif');
-		}, 1000);
-	}).attr('src', 'static/images/001.gif');
+    \$('#animgif').load(function(){
+        \$('#message').text('せー');
+        setTimeout(function() {
+            \$('#animgif').load(function(){
+                \$('#message').text('のー');
+                setTimeout(function() {
+                    \$('#animgif').unbind('load');
+                    \$('#message').text('竜巻旋風脚！！！');
+                    var s = new DUI.Stream();
+                    s.listen('image/gif', function(payload) {
+                        \$('#animgif').attr('src', 'data:image/gif;base64,'+payload);
+                    });
+                    s.listen('complete', function() {
+                    });
+                    s.load('/stream');
+                }, 1000);
+            }).attr('src', 'static/images/002.gif');
+        }, 1000);
+    }).attr('src', 'static/images/001.gif');
 });
 </script>
 <body>
@@ -83,7 +83,7 @@ use File::Basename;
 
 my $app = Tatsumaki::Application->new([
     '/stream' => 'StreamWriter',
-	'/' => 'MainHandler',
+    '/' => 'MainHandler',
 ]);
 
 if (__FILE__ eq $0) {
